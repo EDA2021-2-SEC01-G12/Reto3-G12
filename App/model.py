@@ -43,9 +43,10 @@ los mismos.
 # Construccion de modelos
 
 def createRecord():
-    expediente={"avistamientos":None,"fechas":None}
+    expediente={"avistamientos":None,"fechas":None,"ciudades":None}
     expediente["avistamientos"]=lt.newList("SINGLE_LINKED")
     expediente["fechas"]=mo.newMap(omaptype="RBT")
+    expediente["ciudades"]=mp.newMap(numelements=803,maptype="CHAINING")
     return expediente
 
 # Funciones para agregar informacion al catalogo
@@ -62,9 +63,24 @@ def addSightings(expediente,avistamiento):
         lt.addLast(avistamientosFecha,avistamiento)
     lt.addLast(expediente["avistamientos"],avistamiento)    
 
+def addCity(expediente,avistamiento):
+    ciudad=avistamiento["city"]
+    if not mp.contains(expediente["ciudades"],ciudad):
+        avistamientosCiudad=lt.newList("SINGLE_LINKED")
+        lt.addLast(avistamientosCiudad,avistamiento)
+        mp.put(expediente["ciudades"],ciudad,avistamientosCiudad)
+    else:
+        avistamientosCiudad=me.getValue(mp.get(expediente["ciudades"],ciudad))
+        lt.addLast(avistamientosCiudad,avistamiento) 
+
 # Funciones para creacion de datos
 
 # Funciones de consulta
+
+def sightingsByCity(expediente,ciudad):
+    ciudad=me.getValue(mp.get(expediente["ciudades"],ciudad))
+    ciudad=ms.sort(ciudad,cmpDates)
+    return ciudad
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 

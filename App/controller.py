@@ -41,6 +41,7 @@ def addSightings(expediente):
     sightings = csv.DictReader(open(UFOSFile, encoding="utf-8"),delimiter=",")
     for avistamiento in sightings:
         model.addSightings(expediente, avistamiento)
+        model.addCity(expediente,avistamiento)
 
 # Funciones de ordenamiento
 
@@ -48,3 +49,6 @@ def sortSightings(expediente):
     model.sortSightings(expediente)
 
 # Funciones de consulta sobre el catálogo
+
+def sightingsByCity(expediente,ciudad):
+    return model.sightingsByCity(expediente,ciudad)

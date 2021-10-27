@@ -41,6 +41,9 @@ def createRecord():
 def sortSightings(expediente):
     controller.sortSightings(expediente)
 
+def sightingsByCity(expediente,ciudad):
+    return controller.sightingsByCity(expediente,ciudad)
+
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
@@ -56,7 +59,7 @@ def print10Sightings(expediente):
     i=1
     j=lt.size(avistamientos)-2
     avi=True
-    print("Los primeros y últimos cinco avistamientos registrados son: \n_________________________________________________________________________________________________________________________\n")
+    print("Los cinco avistamientos mas antiguos y los cinco mas recientes registrados son: \n_________________________________________________________________________________________________________________________\n")
     while avi:
         if i!=4:
             avistamientoActual=lt.getElement(avistamientos,i)
@@ -67,6 +70,22 @@ def print10Sightings(expediente):
             if j==lt.size(avistamientos)+1:
                 avi=False
         fechaHora,ciudad,pais,duracion,forma=avistamientoActual['datetime'],avistamientoActual['city'],avistamientoActual['country'].upper(),avistamientoActual['duration (seconds)'],avistamientoActual['shape']
+        if fechaHora=="":
+            fechaHora="Desconocidas"
+        if ciudad=="":
+            ciudad="Desconocida"
+        if pais=="":
+            pais="Desconocido"
+        if duracion=="":
+            duracion="Desconocida"
+        if forma=="":
+            forma="Forma desconocida"
+        print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+"\n- Forma: "+forma+"\n_________________________________________________________________________________________________________________________\n")
+
+def printSightingsByCity(lstCiudad):
+    print("Los tres avistamientos mas antiguos y los tres mas recientes registrados en esa ciudad son: \n_________________________________________________________________________________________________________________________\n")
+    for avis in lt.iterator(lstCiudad):
+        fechaHora,ciudad,pais,duracion,forma=avis['datetime'],avis['city'],avis['country'].upper(),avis['duration (seconds)'],avis['shape']
         if fechaHora=="":
             fechaHora="Desconocidas"
         if ciudad=="":
@@ -99,9 +118,10 @@ while True:
     elif int(inputs[0]) == 2:
         print("\nAltura del arbol: "+str(mo.height(expediente["fechas"])))
         print("Elementos en el arbol: "+str(mo.size(expediente["fechas"]))+"\n")
+        ciudad=input("Ingrese el nombre de la ciudad a consultar: \n")
+        exp=sightingsByCity(expediente,ciudad)
+        printSightingsByCity(exp)
     elif int(inputs[0]) == 3:
-        #print(mo.minKey(expediente['fechas']))
-        #print(str(mo.maxKey(expediente['fechas']))+"\n")
         pass
     elif int(inputs[0]) == 4:
         pass
