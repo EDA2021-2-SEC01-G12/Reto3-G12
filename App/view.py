@@ -79,9 +79,6 @@ def print10Sightings(expediente):
             forma="Forma desconocida"
         print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+"\n- Forma: "+forma+"\n_________________________________________________________________________________________________________________________\n")
 
-
-    pass
-
 expediente = None
 
 """

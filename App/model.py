@@ -62,12 +62,6 @@ def addSightings(expediente,avistamiento):
         lt.addLast(avistamientosFecha,avistamiento)
     lt.addLast(expediente["avistamientos"],avistamiento)    
 
-'''def newEntry():
-    entrada={"hour":None,"lstUFOs":None}
-    entrada['hour']=mp.newMap(numelements=30,maptype='PROBING',)
-    entrada['lstUFOs']=lt.newList('SINGLE_LINKED')
-    return entrada'''
-
 # Funciones para creacion de datos
 
 # Funciones de consulta
