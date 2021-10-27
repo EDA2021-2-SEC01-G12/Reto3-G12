@@ -28,8 +28,10 @@
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
+from DISClib.ADT import orderedmap as mo
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import mergesort as ms
 assert cf
 
 """
@@ -39,7 +41,24 @@ los mismos.
 
 # Construccion de modelos
 
+def createRecord():
+    expediente={"videos":None,"categorias":None}
+    expediente["avistamientos"]=lt.newList("SINGLE_LINKED")
+    expediente["fechas"]=mo.newMap(omaptype="RBT")
+    return expediente
+
 # Funciones para agregar informacion al catalogo
+
+def addSightings(expediente,avistamiento):
+    fecha=avistamiento["datetime"].split(" ")[0].replace(" ","")
+    if not mo.contains(expediente["fechas"],fecha):
+        avistamientosFecha=lt.newList("SINGLE_LINKED")
+        lt.addLast(avistamientosFecha,avistamiento)
+        mo.put(expediente["fechas"],fecha,avistamientosFecha)
+    else:
+        avistamientosFecha=me.getValue(mo.get(expediente["fechas"],fecha))
+        lt.addLast(avistamientosFecha,avistamiento)
+    lt.addLast(expediente["avistamientos"],avistamiento)
 
 # Funciones para creacion de datos
 
@@ -47,4 +66,16 @@ los mismos.
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
+def cmpDates(av1,av2):
+    fecha1=int(av1["datetime"].split(" ")[0].replace(" ","").replace("-",""))
+    fecha2=int(av2["datetime"].split(" ")[0].replace(" ","").replace("-",""))
+    if fecha1<fecha2:
+        return True
+    else:
+        return False
+
 # Funciones de ordenamiento
+
+def sortSightings(expediente):
+    expediente["avistamientos"]=ms.sort(expediente["avistamientos"],cmpfunction=cmpDates)
+    

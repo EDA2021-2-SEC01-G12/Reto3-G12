@@ -23,6 +23,7 @@
 import config as cf
 import sys
 import controller
+from DISClib.ADT import orderedmap as mo
 from DISClib.ADT import list as lt
 assert cf
 
@@ -34,12 +35,23 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
+def createRecord():
+    return controller.createRecord()
+
+def sortSightings(expediente):
+    controller.sortSightings(expediente)
+
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Consultar avistamientos ocurridos en una ciudad en especifico")
+    print("3- Consultar avistamientos por su duracion")
+    print("4- Consultar avistamientos por hora del dia en que sucedieron")
+    print("5- Consultar avistamientos ocurridos dentro de un rango de fechas")
+    print("6- Consultar avistamientos ocurridos en una zona geografica en especifico")
+    print("7- Visualizar avistamientos ocurridos en una zona geografica en especifico")
 
-catalog = None
+expediente = None
 
 """
 Menu principal
@@ -49,10 +61,25 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
-
+        expediente=createRecord()
+        controller.addSightings(expediente)
+        sortSightings(expediente)
+        print ("\nAvistamientos cargados: "+str(lt.size(expediente["avistamientos"]))+"\n")
+        print(lt.firstElement(expediente["avistamientos"]))
+        print(lt.lastElement(expediente["avistamientos"]))
     elif int(inputs[0]) == 2:
+        print("Altura del arbol: "+str(mo.height(expediente["fechas"])))
+        print("Elementos en el arbol: "+str(mo.size(expediente["fechas"]))+"\n")
+    elif int(inputs[0]) == 3:
         pass
-
+    elif int(inputs[0]) == 4:
+        pass
+    elif int(inputs[0]) == 5:
+        pass
+    elif int(inputs[0]) == 6:
+        pass
+    elif int(inputs[0]) == 7:
+        pass
     else:
         sys.exit(0)
 sys.exit(0)
