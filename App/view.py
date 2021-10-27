@@ -69,7 +69,7 @@ def print10Sightings(expediente):
             j+=1
             if j==lt.size(avistamientos)+1:
                 avi=False
-        fechaHora,ciudad,pais,duracion,forma=avistamientoActual['datetime'],avistamientoActual['city'],avistamientoActual['country'].upper(),avistamientoActual['duration (seconds)'],avistamientoActual['shape']
+        fechaHora,ciudad,pais,duracion,forma=avistamientoActual['datetime'],avistamientoActual['city'].title(),avistamientoActual['country'].upper(),avistamientoActual['duration (seconds)'],avistamientoActual['shape']
         if fechaHora=="":
             fechaHora="Desconocidas"
         if ciudad=="":
@@ -80,23 +80,50 @@ def print10Sightings(expediente):
             duracion="Desconocida"
         if forma=="":
             forma="Forma desconocida"
-        print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+"\n- Forma: "+forma+"\n_________________________________________________________________________________________________________________________\n")
+        print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n_________________________________________________________________________________________________________________________\n")
 
 def printSightingsByCity(lstCiudad):
-    print("Los tres avistamientos mas antiguos y los tres mas recientes registrados en esa ciudad son: \n_________________________________________________________________________________________________________________________\n")
-    for avis in lt.iterator(lstCiudad):
-        fechaHora,ciudad,pais,duracion,forma=avis['datetime'],avis['city'],avis['country'].upper(),avis['duration (seconds)'],avis['shape']
-        if fechaHora=="":
-            fechaHora="Desconocidas"
-        if ciudad=="":
-            ciudad="Desconocida"
-        if pais=="":
-            pais="Desconocido"
-        if duracion=="":
-            duracion="Desconocida"
-        if forma=="":
-            forma="Forma desconocida"
-        print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+"\n- Forma: "+forma+"\n_________________________________________________________________________________________________________________________\n")
+    if lt.size(lstCiudad)>=6:
+        i=1
+        j=lt.size(lstCiudad)-2
+        avi=True
+        print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados en esa ciudad son: \n_________________________________________________________________________________________________________________________\n")
+        while avi:
+            if i!=4:
+                avistamientoActual=lt.getElement(lstCiudad,i)
+                i+=1
+            else:
+                avistamientoActual=lt.getElement(lstCiudad,j)
+                j+=1
+                if j==lt.size(lstCiudad)+1:
+                    avi=False
+            fechaHora,ciudad,pais,duracion,forma=avistamientoActual['datetime'],avistamientoActual['city'].title(),avistamientoActual['country'].upper(),avistamientoActual['duration (seconds)'],avistamientoActual['shape']
+            if fechaHora=="":
+                fechaHora="Desconocidas"
+            if ciudad=="":
+                ciudad="Desconocida"
+            if pais=="":
+                pais="Desconocido"
+            if duracion=="":
+                duracion="Desconocida"
+            if forma=="":
+                forma="Forma desconocida"
+            print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n_________________________________________________________________________________________________________________________\n")
+    else:
+        print("_________________________________________________________________________________________________________________________\n")
+        for avis in lt.iterator(lstCiudad):
+            fechaHora,ciudad,pais,duracion,forma=avis['datetime'],avis['city'].title(),avis['country'].upper(),avis['duration (seconds)'],avis['shape']
+            if fechaHora=="":
+                fechaHora="Desconocidas"
+            if ciudad=="":
+                ciudad="Desconocida"
+            if pais=="":
+                pais="Desconocido"
+            if duracion=="":
+                duracion="Desconocida"
+            if forma=="":
+                forma="Forma desconocida"
+            print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n_________________________________________________________________________________________________________________________\n")
 
 expediente = None
 
@@ -106,31 +133,32 @@ Menu principal
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
-    if int(inputs[0]) == 1:
+    if inputs == "1":
         print("Cargando información de los archivos ....")
         expediente=createRecord()
         controller.addSightings(expediente)
         sortSightings(expediente)
         print ("\nAvistamientos cargados: "+str(lt.size(expediente["avistamientos"]))+"\n")
         print10Sightings(expediente)
-        #print(lt.firstElement(expediente["avistamientos"]))
-        #print(lt.lastElement(expediente["avistamientos"]))
-    elif int(inputs[0]) == 2:
+    elif inputs == "2":
         print("\nAltura del arbol: "+str(mo.height(expediente["fechas"])))
         print("Elementos en el arbol: "+str(mo.size(expediente["fechas"]))+"\n")
         ciudad=input("Ingrese el nombre de la ciudad a consultar: \n")
         exp=sightingsByCity(expediente,ciudad)
+        print("\nSe han registrado "+str(lt.size(exp))+" avistamientos en "+ciudad.title())
         printSightingsByCity(exp)
-    elif int(inputs[0]) == 3:
+    elif inputs == "3":
         pass
-    elif int(inputs[0]) == 4:
+    elif inputs == "4":
         pass
-    elif int(inputs[0]) == 5:
+    elif inputs == "5":
         pass
-    elif int(inputs[0]) == 6:
+    elif inputs == "6":
         pass
-    elif int(inputs[0]) == 7:
+    elif inputs == "7":
         pass
-    else:
+    elif inputs == "0":
         sys.exit(0)
+    else:
+        print("\nOpcion invalida\n")
 sys.exit(0)
