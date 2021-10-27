@@ -32,6 +32,7 @@ from DISClib.ADT import orderedmap as mo
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import mergesort as ms
+import datetime
 assert cf
 
 """
@@ -42,7 +43,7 @@ los mismos.
 # Construccion de modelos
 
 def createRecord():
-    expediente={"videos":None,"categorias":None}
+    expediente={"avistamientos":None,"fechas":None}
     expediente["avistamientos"]=lt.newList("SINGLE_LINKED")
     expediente["fechas"]=mo.newMap(omaptype="RBT")
     return expediente
@@ -50,15 +51,22 @@ def createRecord():
 # Funciones para agregar informacion al catalogo
 
 def addSightings(expediente,avistamiento):
-    fecha=avistamiento["datetime"].split(" ")[0].replace(" ","")
-    if not mo.contains(expediente["fechas"],fecha):
+    av=avistamiento["datetime"]
+    fecha=datetime.datetime.strptime(av, '%Y-%m-%d %H:%M:%S')
+    if not mo.contains(expediente["fechas"],fecha.date()):
         avistamientosFecha=lt.newList("SINGLE_LINKED")
         lt.addLast(avistamientosFecha,avistamiento)
-        mo.put(expediente["fechas"],fecha,avistamientosFecha)
+        mo.put(expediente["fechas"],fecha.date(),avistamientosFecha)
     else:
-        avistamientosFecha=me.getValue(mo.get(expediente["fechas"],fecha))
+        avistamientosFecha=me.getValue(mo.get(expediente["fechas"],fecha.date()))
         lt.addLast(avistamientosFecha,avistamiento)
-    lt.addLast(expediente["avistamientos"],avistamiento)
+    lt.addLast(expediente["avistamientos"],avistamiento)    
+
+'''def newEntry():
+    entrada={"hour":None,"lstUFOs":None}
+    entrada['hour']=mp.newMap(numelements=30,maptype='PROBING',)
+    entrada['lstUFOs']=lt.newList('SINGLE_LINKED')
+    return entrada'''
 
 # Funciones para creacion de datos
 

@@ -51,6 +51,37 @@ def printMenu():
     print("6- Consultar avistamientos ocurridos en una zona geografica en especifico")
     print("7- Visualizar avistamientos ocurridos en una zona geografica en especifico")
 
+def print10Sightings(expediente):
+    avistamientos=expediente['avistamientos']
+    i=1
+    j=lt.size(avistamientos)-2
+    avi=True
+    print("Los primeros y últimos cinco avistamientos registrados son: \n_________________________________________________________________________________________________________________________\n")
+    while avi:
+        if i!=4:
+            avistamientoActual=lt.getElement(avistamientos,i)
+            i+=1
+        else:
+            avistamientoActual=lt.getElement(avistamientos,j)
+            j+=1
+            if j==lt.size(avistamientos)+1:
+                avi=False
+        fechaHora,ciudad,pais,duracion,forma=avistamientoActual['datetime'],avistamientoActual['city'],avistamientoActual['country'].upper(),avistamientoActual['duration (seconds)'],avistamientoActual['shape']
+        if fechaHora=="":
+            fechaHora="Desconocidas"
+        if ciudad=="":
+            ciudad="Desconocida"
+        if pais=="":
+            pais="Desconocido"
+        if duracion=="":
+            duracion="Desconocida"
+        if forma=="":
+            forma="Forma desconocida"
+        print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+"\n- Forma: "+forma+"\n_________________________________________________________________________________________________________________________\n")
+
+
+    pass
+
 expediente = None
 
 """
@@ -65,12 +96,15 @@ while True:
         controller.addSightings(expediente)
         sortSightings(expediente)
         print ("\nAvistamientos cargados: "+str(lt.size(expediente["avistamientos"]))+"\n")
-        print(lt.firstElement(expediente["avistamientos"]))
-        print(lt.lastElement(expediente["avistamientos"]))
+        print10Sightings(expediente)
+        #print(lt.firstElement(expediente["avistamientos"]))
+        #print(lt.lastElement(expediente["avistamientos"]))
     elif int(inputs[0]) == 2:
-        print("Altura del arbol: "+str(mo.height(expediente["fechas"])))
+        print("\nAltura del arbol: "+str(mo.height(expediente["fechas"])))
         print("Elementos en el arbol: "+str(mo.size(expediente["fechas"]))+"\n")
     elif int(inputs[0]) == 3:
+        #print(mo.minKey(expediente['fechas']))
+        #print(str(mo.maxKey(expediente['fechas']))+"\n")
         pass
     elif int(inputs[0]) == 4:
         pass
