@@ -92,7 +92,14 @@ def avistamientosFechaMasAntigua(expediente):
 def avistamientosEnRango(expediente,fechaInicio,fechaFin):
     fechaInicio=(datetime.datetime.strptime(fechaInicio, '%Y-%m-%d')).date()
     fechaFin=(datetime.datetime.strptime(fechaFin, '%Y-%m-%d')).date()
-    print(fechaFin,fechaInicio)
+    avistamientosFechas=lt.newList("SINGLE_LINKED")
+    fechasEnRango=mo.keys(expediente["fechas"],fechaInicio,fechaFin)
+    for date in lt.iterator(fechasEnRango):
+        avistamientos=me.getValue(mo.get(expediente["fechas"],date))
+        for sighting in lt.iterator(avistamientos):
+            lt.addLast(avistamientosFechas,sighting)
+    numAvistamientos=lt.size(avistamientosFechas)
+    return numAvistamientos,avistamientosFechas
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 

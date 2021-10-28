@@ -88,20 +88,19 @@ def print10Sightings(expediente):
             forma="Forma desconocida"
         print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n_________________________________________________________________________________________________________________________\n")
 
-def printSightingsByCity(lstCiudad):
-    if lt.size(lstCiudad)>=6:
+def printSightings(lst):
+    if lt.size(lst)>=6:
         i=1
-        j=lt.size(lstCiudad)-2
+        j=lt.size(lst)-2
         avi=True
-        print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados en esa ciudad son: \n_________________________________________________________________________________________________________________________\n")
         while avi:
             if i!=4:
-                avistamientoActual=lt.getElement(lstCiudad,i)
+                avistamientoActual=lt.getElement(lst,i)
                 i+=1
             else:
-                avistamientoActual=lt.getElement(lstCiudad,j)
+                avistamientoActual=lt.getElement(lst,j)
                 j+=1
-                if j==lt.size(lstCiudad)+1:
+                if j==lt.size(lst)+1:
                     avi=False
             fechaHora,ciudad,pais,duracion,forma=avistamientoActual['datetime'],avistamientoActual['city'].title(),avistamientoActual['country'].upper(),avistamientoActual['duration (seconds)'],avistamientoActual['shape']
             if fechaHora=="":
@@ -116,8 +115,7 @@ def printSightingsByCity(lstCiudad):
                 forma="Forma desconocida"
             print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n_________________________________________________________________________________________________________________________\n")
     else:
-        print("_________________________________________________________________________________________________________________________\n")
-        for avis in lt.iterator(lstCiudad):
+        for avis in lt.iterator(lst):
             fechaHora,ciudad,pais,duracion,forma=avis['datetime'],avis['city'].title(),avis['country'].upper(),avis['duration (seconds)'],avis['shape']
             if fechaHora=="":
                 fechaHora="Desconocidas"
@@ -147,22 +145,32 @@ while True:
         print ("\nAvistamientos cargados: "+str(lt.size(expediente["avistamientos"]))+"\n")
         print10Sightings(expediente)
     elif inputs == "2":
-        print("\nAltura del arbol: "+str(mo.height(expediente["fechas"])))
-        print("Elementos en el arbol: "+str(mo.size(expediente["fechas"]))+"\n")
         ciudad=input("Ingrese el nombre de la ciudad a consultar: \n")
         exp=sightingsByCity(expediente,ciudad)
-        print("\nSe han registrado "+str(lt.size(exp))+" avistamientos en "+ciudad.title())
-        printSightingsByCity(exp)
+        print("\nAltura del arbol: "+str(mo.height(expediente["fechas"])))
+        print("Elementos en el arbol: "+str(mo.size(expediente["fechas"]))+"\n")
+        print("Se han registrado "+str(lt.size(exp))+" avistamientos en "+ciudad.title())
+        if lt.size(exp)>=6:
+            print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados en esta ciudad son: \n_________________________________________________________________________________________________________________________\n")
+        else:
+            print("_________________________________________________________________________________________________________________________\n")
+        printSightings(exp)
     elif inputs == "3":
         pass
     elif inputs == "4":
         pass
     elif inputs == "5":
         fecha=avistamientosFechaMasAntigua(expediente)
-        print("La fecha mas antigua con avistamientos registrados es ",fecha[0]," donde hubo "+str(fecha[1])+" avistamiento(s)")
+        print("\nLa fecha mas antigua con avistamientos registrados es ",fecha[0]," donde hubo "+str(fecha[1])+" avistamiento(s)\n")
         fechaInicio=input("Ingrese la fecha incial para la consulta:\n")
         fechaFin=input("Ingrese la fecha final para la consulta:\n")
         avistamientos=avistamientosEnRango(expediente,fechaInicio,fechaFin)
+        print("\nSe tiene registro de "+str(avistamientos[0])+" avistamientos entre "+fechaInicio+" y "+fechaFin)
+        if avistamientos[0]>=6:
+            print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados entre estas fechas son: \n_________________________________________________________________________________________________________________________\n")
+        else:
+            print("_________________________________________________________________________________________________________________________\n")
+        printSightings(avistamientos[1])
     elif inputs == "6":
         pass
     elif inputs == "7":
