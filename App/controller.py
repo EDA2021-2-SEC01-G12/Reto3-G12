@@ -52,3 +52,9 @@ def sortSightings(expediente):
 
 def sightingsByCity(expediente,ciudad):
     return model.sightingsByCity(expediente,ciudad)
+
+def avistamientosFechaMasAntigua(expediente):
+    return model.avistamientosFechaMasAntigua(expediente)
+
+def avistamientosEnRango(expediente,fechaInicio,fechaFin):
+    return model.avistamientosEnRango(expediente,fechaInicio,fechaFin)

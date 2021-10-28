@@ -44,6 +44,12 @@ def sortSightings(expediente):
 def sightingsByCity(expediente,ciudad):
     return controller.sightingsByCity(expediente,ciudad)
 
+def avistamientosFechaMasAntigua(expediente):
+    return controller.avistamientosFechaMasAntigua(expediente)
+
+def avistamientosEnRango(expediente,fechaInicio,fechaFin):
+    return controller.avistamientosEnRango(expediente,fechaInicio,fechaFin)
+
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
@@ -152,7 +158,11 @@ while True:
     elif inputs == "4":
         pass
     elif inputs == "5":
-        pass
+        fecha=avistamientosFechaMasAntigua(expediente)
+        print("La fecha mas antigua con avistamientos registrados es ",fecha[0]," donde hubo "+str(fecha[1])+" avistamiento(s)")
+        fechaInicio=input("Ingrese la fecha incial para la consulta:\n")
+        fechaFin=input("Ingrese la fecha final para la consulta:\n")
+        avistamientos=avistamientosEnRango(expediente,fechaInicio,fechaFin)
     elif inputs == "6":
         pass
     elif inputs == "7":
@@ -162,3 +172,14 @@ while True:
     else:
         print("\nOpcion invalida\n")
 sys.exit(0)
+
+
+#preguntas pal profe
+
+'''
+Toca imprimir tal cual nos dice el ejemplo? o nos apegamos a lo que dice el enunciado (ej: req 1 aparece 
+el top 5 y req 4: pide la ultima fecha y su numero de avistamientos, pero en el ejemplo aparecen las ultimas
+5 fechas)
+
+
+'''

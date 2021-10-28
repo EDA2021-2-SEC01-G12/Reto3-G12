@@ -82,6 +82,18 @@ def sightingsByCity(expediente,ciudad):
     ciudad=ms.sort(ciudad,cmpDates)
     return ciudad
 
+def avistamientosFechaMasAntigua(expediente):
+    fechas=expediente["fechas"]
+    fechaMasAntigua=mo.minKey(fechas)
+    avistamientosFechaMasAntigua=me.getValue(mo.get(fechas,fechaMasAntigua))
+    avis=lt.size(avistamientosFechaMasAntigua)
+    return fechaMasAntigua,avis
+
+def avistamientosEnRango(expediente,fechaInicio,fechaFin):
+    fechaInicio=(datetime.datetime.strptime(fechaInicio, '%Y-%m-%d')).date()
+    fechaFin=(datetime.datetime.strptime(fechaFin, '%Y-%m-%d')).date()
+    print(fechaFin,fechaInicio)
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def cmpDates(av1,av2):
