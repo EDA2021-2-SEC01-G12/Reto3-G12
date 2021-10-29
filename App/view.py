@@ -172,7 +172,11 @@ while True:
             print("_________________________________________________________________________________________________________________________\n")
         printSightings(avistamientos[1])
     elif inputs == "6":
-        pass
+        longitud=round(float("-122.3308333"),2)
+        avistamientos=mo.get(expediente["longitudes"],longitud)["value"]
+        for i in lt.iterator(avistamientos):
+            print (i)
+            print(i['latitude'])
     elif inputs == "7":
         pass
     elif inputs == "0":

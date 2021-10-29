@@ -42,6 +42,7 @@ def addSightings(expediente):
     for avistamiento in sightings:
         model.addSightings(expediente, avistamiento)
         model.addCity(expediente,avistamiento)
+        model.addLongitud(expediente,avistamiento)
 
 # Funciones de ordenamiento
 

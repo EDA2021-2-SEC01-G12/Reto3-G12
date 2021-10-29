@@ -43,10 +43,11 @@ los mismos.
 # Construccion de modelos
 
 def createRecord():
-    expediente={"avistamientos":None,"fechas":None,"ciudades":None}
+    expediente={"avistamientos":None,"fechas":None,"ciudades":None,"longitudes":None}
     expediente["avistamientos"]=lt.newList("SINGLE_LINKED")
     expediente["fechas"]=mo.newMap(omaptype="RBT")
     expediente["ciudades"]=mp.newMap(numelements=803,maptype="CHAINING")
+    expediente["longitudes"]=mo.newMap(omaptype="RBT")
     return expediente
 
 # Funciones para agregar informacion al catalogo
@@ -72,6 +73,16 @@ def addCity(expediente,avistamiento):
     else:
         avistamientosCiudad=me.getValue(mp.get(expediente["ciudades"],ciudad))
         lt.addLast(avistamientosCiudad,avistamiento) 
+
+def addLongitud(expediente,avistamiento):
+    longitud=round(float(avistamiento['longitude']),2)
+    if not mo.contains(expediente["longitudes"],longitud):
+        avistamientos=lt.newList("SINGLE_LINKED",cmpfunction=cmpPorLatitud)
+        lt.addLast(avistamientos,avistamiento)
+        mo.put(expediente["longitudes"],longitud,avistamientos)
+    else:
+        avistamientos=me.getValue(mo.get(expediente["longitudes"],longitud))
+        lt.addLast(avistamientos,avistamiento)
 
 # Funciones para creacion de datos
 
@@ -110,6 +121,16 @@ def cmpDates(av1,av2):
         return True
     else:
         return False
+
+def cmpPorLatitud(avi1,avi2):
+    lat1=round(float(avi1["latitude"]),2)
+    lat2=round(float(avi2["latitude"]),2)
+    if lat1<lat2:
+        return 1
+    elif lat1<lat2:
+        return -1
+    else:
+        return 0
 
 # Funciones de ordenamiento
 
