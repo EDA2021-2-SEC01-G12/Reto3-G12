@@ -59,3 +59,6 @@ def avistamientosFechaMasAntigua(expediente):
 
 def avistamientosEnRango(expediente,fechaInicio,fechaFin):
     return model.avistamientosEnRango(expediente,fechaInicio,fechaFin)
+
+def avistamientosZona(expediente,longMin,longMax,latMin,latMax):
+    return model.avistamientosZona(expediente,longMin,longMax,latMin,latMax)

@@ -77,7 +77,7 @@ def addCity(expediente,avistamiento):
 def addLongitud(expediente,avistamiento):
     longitud=round(float(avistamiento['longitude']),2)
     if not mo.contains(expediente["longitudes"],longitud):
-        avistamientos=lt.newList("SINGLE_LINKED",cmpfunction=cmpPorLatitud)
+        avistamientos=lt.newList("SINGLE_LINKED")#,cmpfunction=cmpPorLatitud)
         lt.addLast(avistamientos,avistamiento)
         mo.put(expediente["longitudes"],longitud,avistamientos)
     else:
@@ -112,6 +112,20 @@ def avistamientosEnRango(expediente,fechaInicio,fechaFin):
     numAvistamientos=lt.size(avistamientosFechas)
     return numAvistamientos,avistamientosFechas
 
+def avistamientosZona(expediente,longMin,longMax,latMin,latMax):
+    longKeys=mo.keys(expediente["longitudes"],longMin,longMax)
+    avistamientosLongLat=lt.newList("SINGLE_LINKED")
+    for long in lt.iterator(longKeys):
+        lista=me.getValue(mo.get(expediente["longitudes"],long))
+        for avis in lt.iterator(lista):
+            lat=float(avis["latitude"])
+            lat=round(lat,2)
+            if latMin<=lat<=latMax:
+                lt.addLast(avistamientosLongLat,avis)
+    num=lt.size(avistamientosLongLat)
+    avistamientosLongLat=ms.sort(avistamientosLongLat,cmpLongLat)
+    return avistamientosLongLat,num
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def cmpDates(av1,av2):
@@ -122,15 +136,15 @@ def cmpDates(av1,av2):
     else:
         return False
 
-def cmpPorLatitud(avi1,avi2):
+def cmpLongLat(avi1,avi2):
     lat1=round(float(avi1["latitude"]),2)
     lat2=round(float(avi2["latitude"]),2)
     if lat1<lat2:
-        return 1
-    elif lat1<lat2:
-        return -1
+        return True
+    elif lat1>lat2:
+        return False
     else:
-        return 0
+        return avi1["longitude"]<avi2["longitude"]
 
 # Funciones de ordenamiento
 

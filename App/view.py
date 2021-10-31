@@ -1,4 +1,4 @@
-﻿"""
+"""
  * Copyright 2020, Departamento de sistemas y Computación, Universidad
  * de Los Andes
  *
@@ -50,6 +50,9 @@ def avistamientosFechaMasAntigua(expediente):
 def avistamientosEnRango(expediente,fechaInicio,fechaFin):
     return controller.avistamientosEnRango(expediente,fechaInicio,fechaFin)
 
+def avistamientosZona(expediente,longMin,longMax,latMin,latMax):
+    return controller.avistamientosZona(expediente,longMin,longMax,latMin,latMax)
+
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
@@ -88,10 +91,10 @@ def print10Sightings(expediente):
             forma="Forma desconocida"
         print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n_________________________________________________________________________________________________________________________\n")
 
-def printSightings(lst):
-    if lt.size(lst)>=6:
-        i=1
-        j=lt.size(lst)-2
+def printSightings(lst,num1,num2,total):
+    if lt.size(lst)>=total:
+        i=num1
+        j=lt.size(lst)-num2
         avi=True
         while avi:
             if i!=4:
@@ -102,7 +105,7 @@ def printSightings(lst):
                 j+=1
                 if j==lt.size(lst)+1:
                     avi=False
-            fechaHora,ciudad,pais,duracion,forma=avistamientoActual['datetime'],avistamientoActual['city'].title(),avistamientoActual['country'].upper(),avistamientoActual['duration (seconds)'],avistamientoActual['shape']
+            fechaHora,ciudad,pais,duracion,forma,longitud,latitud=avistamientoActual['datetime'],avistamientoActual['city'].title(),avistamientoActual['country'].upper(),avistamientoActual['duration (seconds)'],avistamientoActual['shape'],avistamientoActual['longitude'],avistamientoActual['latitude']
             if fechaHora=="":
                 fechaHora="Desconocidas"
             if ciudad=="":
@@ -113,10 +116,10 @@ def printSightings(lst):
                 duracion="Desconocida"
             if forma=="":
                 forma="Forma desconocida"
-            print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n_________________________________________________________________________________________________________________________\n")
+            print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n- Longitud: "+str(longitud)+"\n- Latitud: "+str(latitud)+"\n_________________________________________________________________________________________________________________________\n")
     else:
         for avis in lt.iterator(lst):
-            fechaHora,ciudad,pais,duracion,forma=avis['datetime'],avis['city'].title(),avis['country'].upper(),avis['duration (seconds)'],avis['shape']
+            fechaHora,ciudad,pais,duracion,forma,longitud,latitud=avis['datetime'],avis['city'].title(),avis['country'].upper(),avis['duration (seconds)'],avis['shape'],avis['longitude'],avis['latitude']
             if fechaHora=="":
                 fechaHora="Desconocidas"
             if ciudad=="":
@@ -127,7 +130,7 @@ def printSightings(lst):
                 duracion="Desconocida"
             if forma=="":
                 forma="Forma desconocida"
-            print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n_________________________________________________________________________________________________________________________\n")
+            print("- Fecha y hora del avistamiento: "+fechaHora+"\n- Pais: "+pais+"\n- Ciudad: "+ciudad+"\n- Duracion: "+duracion+" segundos\n- Forma: "+forma.title()+"\n- Longitud: "+str(longitud)+"\n- Latitud: "+str(latitud)+"\n_________________________________________________________________________________________________________________________\n")
 
 expediente = None
 
@@ -154,7 +157,7 @@ while True:
             print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados en esta ciudad son: \n_________________________________________________________________________________________________________________________\n")
         else:
             print("_________________________________________________________________________________________________________________________\n")
-        printSightings(exp)
+        printSightings(exp,1,2,6)
     elif inputs == "3":
         pass
     elif inputs == "4":
@@ -162,21 +165,78 @@ while True:
     elif inputs == "5":
         fecha=avistamientosFechaMasAntigua(expediente)
         print("\nLa fecha mas antigua con avistamientos registrados es ",fecha[0]," donde hubo "+str(fecha[1])+" avistamiento(s)\n")
-        fechaInicio=input("Ingrese la fecha incial para la consulta:\n")
-        fechaFin=input("Ingrese la fecha final para la consulta:\n")
+        anioInicio,mesInicio,diaInicio,anioFin,mesFin,diaFin=True,True,True,True,True,True
+        print("Ingrese el año inicial en formato de 4 dígitos:")
+        anio1=input("")
+        while anioInicio:
+            if len(anio1)!=4:
+                print("El número ingresado tiene un formato invalido")
+                anio1=input("")
+            else:
+                anioInicio=False
+        print("Ingrese el mes inicial en formato de 2 dígitos:")
+        mes1=input("")
+        while mesInicio:
+            if len(mes1)!=2:
+                print("El número ingresado tiene un formato invalido")
+                mes1=input("")
+            else:
+                mesInicio=False
+        print("Ingrese el dia inicial en formato de 2 dígitos:")
+        dia1=input("")
+        while diaInicio:
+            if len(dia1)!=2:
+                print("El número ingresado tiene un formato invalido")
+                dia1=input("")
+            else:
+                diaInicio=False
+        print("Ingrese el año final en formato de 4 dígitos:")
+        anio2=input("")
+        while anioFin:
+            if len(anio2)!=4:
+                print("El número ingresado tiene un formato invalido")
+                anio2=input("")
+            else:
+                anioFin=False
+        print("Ingrese el mes final en formato de 2 dígitos:")
+        mes2=input("")
+        while mesFin:
+            if len(mes2)!=2:
+                print("El número ingresado tiene un formato invalido")
+                mes2=input("")
+            else:
+                mesFin=False
+        print("Ingrese el dia inicial en formato de 2 dígitos:")
+        dia2=input("")
+        while diaFin:
+            if len(dia2)!=2:
+                print("El número ingresado tiene un formato invalido")
+                dia2=input("")
+            else:
+                diaFin=False
+        fechaInicio=anio1+"-"+mes1+"-"+dia1
+        fechaFin=anio2+"-"+mes2+"-"+dia2
         avistamientos=avistamientosEnRango(expediente,fechaInicio,fechaFin)
         print("\nSe tiene registro de "+str(avistamientos[0])+" avistamientos entre "+fechaInicio+" y "+fechaFin)
         if avistamientos[0]>=6:
             print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados entre estas fechas son: \n_________________________________________________________________________________________________________________________\n")
         else:
             print("_________________________________________________________________________________________________________________________\n")
-        printSightings(avistamientos[1])
+        printSightings(avistamientos[1],1,2,6)
     elif inputs == "6":
-        longitud=round(float("-122.3308333"),2)
-        avistamientos=mo.get(expediente["longitudes"],longitud)["value"]
-        for i in lt.iterator(avistamientos):
-            print (i)
-            print(i['latitude'])
+        longMin=float(input("Ingrese la longitud minima para la busqueda:\n"))
+        longMax=float(input("Ingrese la longitud maxima para la busqueda:\n"))
+        latMin=float(input("Ingrese la latitud minima para la busqueda:\n"))
+        latMax=float(input("Ingrese la latitud maxima para la busqueda:\n"))
+        avistamientosZoneGeo=avistamientosZona(expediente,longMin,longMax,latMin,latMax)
+        avis=avistamientosZoneGeo[0]
+        numero=avistamientosZoneGeo[1]
+        print("\nSe tiene registro de "+str(numero)+" avistamientos entre las latitudes "+str(longMin)+" y "+str(longMax)+" y las latitudes "+str(latMin)+" y "+str(latMax))
+        if numero>=10:
+            print("\nLos primeros y ultimos cinco avistamientos registrados en esta zona son: \n_________________________________________________________________________________________________________________________\n")
+        else:
+            print("_________________________________________________________________________________________________________________________\n")
+        printSightings(avis,1,9,10)
     elif inputs == "7":
         pass
     elif inputs == "0":
