@@ -47,6 +47,9 @@ def sightingsByCity(expediente,ciudad):
 def avistamientosFechaMasAntigua(expediente):
     return controller.avistamientosFechaMasAntigua(expediente)
 
+def avistamientosPorDuracion(expediente,duracionMin,duracionMax):
+    return controller.avistamientosPorDuracion(expediente,duracionMin,duracionMax)
+
 def avistamientosEnRango(expediente,fechaInicio,fechaFin):
     return controller.avistamientosEnRango(expediente,fechaInicio,fechaFin)
 
@@ -159,7 +162,15 @@ while True:
             print("_________________________________________________________________________________________________________________________\n")
         printSightings(exp,1,2,6)
     elif inputs == "3":
-        pass
+        duracionMin=float(input("Ingrese la duracion minima en segundos para la busqueda:\n"))
+        duracionMax=float(input("Ingrese la duracion maxima en segundos para la busqueda:\n"))
+        avistamientos=avistamientosPorDuracion(expediente,duracionMin,duracionMax)
+        print("\nLa mayor duracion registrada es de "+str(avistamientos[0])+" segundos con "+str(avistamientos[1])+" avistamiento(s)")
+        if lt.size(avistamientos[2])>=6:
+            print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados en esta ciudad son: \n_________________________________________________________________________________________________________________________\n")
+        else:
+            print("_________________________________________________________________________________________________________________________\n")
+        printSightings(avistamientos[2],1,2,6)
     elif inputs == "4":
         pass
     elif inputs == "5":
@@ -238,7 +249,7 @@ while True:
             print("_________________________________________________________________________________________________________________________\n")
         printSightings(avis,1,9,10)
     elif inputs == "7":
-        pass
+        print(mo.keySet(expediente["duraciones"]))
     elif inputs == "0":
         sys.exit(0)
     else:

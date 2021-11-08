@@ -43,6 +43,7 @@ def addSightings(expediente):
         model.addSightings(expediente, avistamiento)
         model.addCity(expediente,avistamiento)
         model.addLongitud(expediente,avistamiento)
+        model.addDuration(expediente,avistamiento)
 
 # Funciones de ordenamiento
 
@@ -56,6 +57,9 @@ def sightingsByCity(expediente,ciudad):
 
 def avistamientosFechaMasAntigua(expediente):
     return model.avistamientosFechaMasAntigua(expediente)
+
+def avistamientosPorDuracion(expediente,duracionMin,duracionMax):
+    return model.avistamientosPorDuracion(expediente,duracionMin,duracionMax)
 
 def avistamientosEnRango(expediente,fechaInicio,fechaFin):
     return model.avistamientosEnRango(expediente,fechaInicio,fechaFin)
