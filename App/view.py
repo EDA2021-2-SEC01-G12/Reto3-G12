@@ -47,8 +47,8 @@ def sightingsByCity(expediente,ciudad):
 def avistamientosFechaMasAntigua(expediente):
     return controller.avistamientosFechaMasAntigua(expediente)
 
-def avistamientosPorDuracion(expediente,duracionMin,duracionMax):
-    return controller.avistamientosPorDuracion(expediente,duracionMin,duracionMax)
+def avistamientosPorDuracion(expediente,duracionMin,duracionMax,requerimiento):
+    return controller.avistamientosPorDuracion(expediente,duracionMin,duracionMax,requerimiento)
 
 def avistamientosEnRango(expediente,fechaInicio,fechaFin):
     return controller.avistamientosEnRango(expediente,fechaInicio,fechaFin)
@@ -164,7 +164,7 @@ while True:
     elif inputs == "3":
         duracionMin=float(input("Ingrese la duracion minima en segundos para la busqueda:\n"))
         duracionMax=float(input("Ingrese la duracion maxima en segundos para la busqueda:\n"))
-        avistamientos=avistamientosPorDuracion(expediente,duracionMin,duracionMax)
+        avistamientos=avistamientosPorDuracion(expediente,duracionMin,duracionMax,"2")
         print("\nLa mayor duracion registrada es de "+str(avistamientos[0])+" segundos con "+str(avistamientos[1])+" avistamiento(s)")
         if lt.size(avistamientos[2])>=6:
             print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados en esta ciudad son: \n_________________________________________________________________________________________________________________________\n")
@@ -172,7 +172,16 @@ while True:
             print("_________________________________________________________________________________________________________________________\n")
         printSightings(avistamientos[2],1,2,6)
     elif inputs == "4":
-        pass
+        horaMin=input("Ingrese el tiempo minimo (en formato HH:MM) para la busqueda en formato:\n")
+        horaMax=input("Ingrese el tiempo maximo (en formato HH:MM) para la busqueda en formato:\n")
+        avistamientos=avistamientosPorDuracion(expediente,horaMin,horaMax,"3")
+        print("\nLa mayor duracion registrada es de "+str(avistamientos[0])+" segundos con "+str(avistamientos[1])+" avistamiento(s)")
+        print("\nEl total de avistamientos ocurridos entre "+horaMin+" y "+horaMax+" son "+str(lt.size(avistamientos[2])))
+        if lt.size(avistamientos[2])>=6:
+            print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados en esta ciudad son: \n_________________________________________________________________________________________________________________________\n")
+        else:
+            print("_________________________________________________________________________________________________________________________\n")
+        printSightings(avistamientos[2],1,2,6)
     elif inputs == "5":
         fecha=avistamientosFechaMasAntigua(expediente)
         print("\nLa fecha mas antigua con avistamientos registrados es ",fecha[0]," donde hubo "+str(fecha[1])+" avistamiento(s)\n")
@@ -258,11 +267,3 @@ sys.exit(0)
 
 
 #preguntas pal profe
-
-'''
-Toca imprimir tal cual nos dice el ejemplo? o nos apegamos a lo que dice el enunciado (ej: req 1 aparece 
-el top 5 y req 4: pide la ultima fecha y su numero de avistamientos, pero en el ejemplo aparecen las ultimas
-5 fechas)
-
-
-'''

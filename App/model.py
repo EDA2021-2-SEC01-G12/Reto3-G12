@@ -43,12 +43,13 @@ los mismos.
 # Construccion de modelos
 
 def createRecord():
-    expediente={"avistamientos":None,"fechas":None,"ciudades":None,"longitudes":None,"duracion":None}
+    expediente={"avistamientos":None,"fechas":None,"ciudades":None,"longitudes":None,"duracion":None,"horaDia":None}
     expediente["avistamientos"]=lt.newList("SINGLE_LINKED")
     expediente["fechas"]=mo.newMap(omaptype="RBT")
     expediente["ciudades"]=mp.newMap(numelements=803,maptype="CHAINING")
     expediente["longitudes"]=mo.newMap(omaptype="RBT")
     expediente["duraciones"]=mo.newMap(omaptype="RBT")
+    expediente["horaMin"]=mo.newMap(omaptype="RBT")
     return expediente
 
 # Funciones para agregar informacion al catalogo
@@ -95,6 +96,17 @@ def addDuration(expediente,avistamiento):
         avistamientos=me.getValue(mo.get(expediente["duraciones"],duracion))
         lt.addLast(avistamientos,avistamiento)
 
+def addHoraMin(expediente,avistamiento):
+    av=avistamiento["datetime"]
+    fecha=(datetime.datetime.strptime(av, '%Y-%m-%d %H:%M:%S')).time()
+    if not mo.contains(expediente["horaMin"],fecha):
+        avistamientos=lt.newList("SINGLE_LINKED")
+        lt.addLast(avistamientos,avistamiento)
+        mo.put(expediente["horaMin"],fecha,avistamientos)
+    else:
+        avistamientos=me.getValue(mo.get(expediente["horaMin"],fecha))
+        lt.addLast(avistamientos,avistamiento)
+
 # Funciones para creacion de datos
 
 # Funciones de consulta
@@ -111,16 +123,25 @@ def avistamientosFechaMasAntigua(expediente):
     avis=lt.size(avistamientosFechaMasAntigua)
     return fechaMasAntigua,avis
 
-def avistamientosPorDuracion(expediente,duracionMin,duracionMax):
-    maxDuracion=mo.maxKey(expediente["duraciones"])
-    numAvistamientosMaxKey=lt.size(me.getValue(mo.get(expediente["duraciones"],maxDuracion)))
-    avisRango=mo.keys(expediente["duraciones"],duracionMin,duracionMax)
+def avistamientosPorDuracion(expediente,duracionMin,duracionMax,requerimiento):
+    if requerimiento=="2":
+        llave="duraciones"
+    elif requerimiento=="3":
+        llave="horaMin"
+        duracionMin=(datetime.datetime.strptime(duracionMin, '%H:%M:%S')).time()
+        duracionMax=(datetime.datetime.strptime(duracionMax, '%H:%M:%S')).time()
+    maxDuracion=mo.maxKey(expediente[llave])
+    numAvistamientosMaxKey=lt.size(me.getValue(mo.get(expediente[llave],maxDuracion)))
+    avisRango=mo.keys(expediente[llave],duracionMin,duracionMax)
     listaAvistamientos=lt.newList("SINGLE_LINKED")
     for key in lt.iterator(avisRango):
-        duracion=me.getValue(mo.get(expediente["duraciones"],key))
+        duracion=me.getValue(mo.get(expediente[llave],key))
         for avis in lt.iterator(duracion):
             lt.addLast(listaAvistamientos,avis)
-    listaAvistamientos=ms.sort(listaAvistamientos,cmpDuration)
+    if llave=="duraciones":
+        listaAvistamientos=ms.sort(listaAvistamientos,cmpDuration)
+    else:
+        listaAvistamientos=ms.sort(listaAvistamientos,cmpHoraMin)
     return maxDuracion,numAvistamientosMaxKey,listaAvistamientos
 
 def avistamientosEnRango(expediente,fechaInicio,fechaFin):
@@ -178,6 +199,21 @@ def cmpDuration(avi1,avi2):
         return duracion1<duracion2
     else:
         return ciudadPais1<ciudadPais2
+
+def cmpHoraMin(av1,av2):
+    hora1=av1["datetime"]
+    fecha1=av1["datetime"]
+    hora1=(datetime.datetime.strptime(hora1, '%Y-%m-%d %H:%M:%S')).time()
+    hora2=av2["datetime"]
+    fecha2=av2["datetime"]
+    hora2=(datetime.datetime.strptime(hora2, '%Y-%m-%d %H:%M:%S')).time()
+    fecha1=(datetime.datetime.strptime(fecha1, '%Y-%m-%d %H:%M:%S')).date()
+    fecha2=(datetime.datetime.strptime(fecha2, '%Y-%m-%d %H:%M:%S')).date()
+    if hora1!=hora2:
+        return hora1<hora2
+    else:
+        return fecha1<fecha2
+
 
 # Funciones de ordenamiento
 
