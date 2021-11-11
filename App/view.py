@@ -146,21 +146,21 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if inputs == "1":
         print("Cargando información de los archivos ....")
-        start_time = time.process_time()
+        start_time1 = time.process_time()
         expediente=createRecord()
         controller.addSightings(expediente)
         sortSightings(expediente)
-        stop_time= time.process_time()
-        timeSort= (stop_time-start_time)*1000
+        stop_time1= time.process_time()
+        timeSort1= (stop_time1-start_time1)*1000
         print ("\nAvistamientos cargados: "+str(lt.size(expediente["avistamientos"]))+"\n")
         print10Sightings(expediente)
-        print(str(timeSort)+'milisegundos')
+        print(str(timeSort1)+'milisegundos')
     elif inputs == "2":
         ciudad=input("Ingrese el nombre de la ciudad a consultar: \n")
-        start_time = time.process_time()
+        start_time2 = time.process_time()
         exp=sightingsByCity(expediente,ciudad)
-        stop_time= time.process_time()
-        timeSort= (stop_time-start_time)*1000
+        stop_time2= time.process_time()
+        timeSort2= (stop_time2-start_time2)*1000
         print("\nAltura del arbol: "+str(mo.height(expediente["fechas"])))
         print("Elementos en el arbol: "+str(mo.size(expediente["fechas"]))+"\n")
         print("Se han registrado "+str(lt.size(exp))+" avistamientos en "+ciudad.title())
@@ -169,28 +169,28 @@ while True:
         else:
             print("_________________________________________________________________________________________________________________________\n")
         printSightings(exp,1,2,6)
-        print(str(timeSort)+'milisegundos')
+        print(str(timeSort2)+'milisegundos')
     elif inputs == "3":
         duracionMin=float(input("Ingrese la duracion minima en segundos para la busqueda:\n"))
         duracionMax=float(input("Ingrese la duracion maxima en segundos para la busqueda:\n"))
-        start_time = time.process_time()
+        start_time3 = time.process_time()
         avistamientos=avistamientosPorDuracion(expediente,duracionMin,duracionMax,"2")
-        stop_time= time.process_time()
-        timeSort= (stop_time-start_time)*1000
+        stop_time3= time.process_time()
+        timeSort3= (stop_time3-start_time3)*1000
         print("\nLa mayor duracion registrada es de "+str(avistamientos[0])+" segundos con "+str(avistamientos[1])+" avistamiento(s)")
         if lt.size(avistamientos[2])>=6:
             print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados en esta ciudad son: \n_________________________________________________________________________________________________________________________\n")
         else:
             print("_________________________________________________________________________________________________________________________\n")
         printSightings(avistamientos[2],1,2,6)
-        print(str(timeSort)+'milisegundos')
+        print(str(timeSort3)+'milisegundos')
     elif inputs == "4":
         horaMin=input("Ingrese el tiempo minimo (en formato HH:MM) para la busqueda en formato:\n")
         horaMax=input("Ingrese el tiempo maximo (en formato HH:MM) para la busqueda en formato:\n")
-        start_time = time.process_time()
+        start_time4 = time.process_time()
         avistamientos=avistamientosPorDuracion(expediente,horaMin,horaMax,"3")
-        stop_time= time.process_time()
-        timeSort= (stop_time-start_time)*1000
+        stop_time4= time.process_time()
+        timeSort4= (stop_time4-start_time4)*1000
         print("\nLa mayor duracion registrada es de "+str(avistamientos[0])+" segundos con "+str(avistamientos[1])+" avistamiento(s)")
         print("\nEl total de avistamientos ocurridos entre "+horaMin+" y "+horaMax+" son "+str(lt.size(avistamientos[2])))
         if lt.size(avistamientos[2])>=6:
@@ -198,7 +198,7 @@ while True:
         else:
             print("_________________________________________________________________________________________________________________________\n")
         printSightings(avistamientos[2],1,2,6)
-        print(str(timeSort)+'milisegundos')
+        print(str(timeSort4)+'milisegundos')
     elif inputs == "5":
         fecha=avistamientosFechaMasAntigua(expediente)
         print("\nLa fecha mas antigua con avistamientos registrados es ",fecha[0]," donde hubo "+str(fecha[1])+" avistamiento(s)\n")
@@ -253,26 +253,26 @@ while True:
                 diaFin=False
         fechaInicio=anio1+"-"+mes1+"-"+dia1
         fechaFin=anio2+"-"+mes2+"-"+dia2
-        start_time = time.process_time()
+        start_time5 = time.process_time()
         avistamientos=avistamientosEnRango(expediente,fechaInicio,fechaFin)
-        top_time= time.process_time()
-        timeSort= (stop_time-start_time)*1000
+        stop_time5= time.process_time()
+        timeSort5= (stop_time5-start_time5)*1000
         print("\nSe tiene registro de "+str(avistamientos[0])+" avistamientos entre "+fechaInicio+" y "+fechaFin)
         if avistamientos[0]>=6:
             print("\nLos tres avistamientos mas antiguos y los tres mas recientes registrados entre estas fechas son: \n_________________________________________________________________________________________________________________________\n")
         else:
             print("_________________________________________________________________________________________________________________________\n")
         printSightings(avistamientos[1],1,2,6)
-        print(str(timeSort)+'milisegundos')
+        print(str(timeSort5)+'milisegundos')
     elif inputs == "6":
         longMin=float(input("Ingrese la longitud minima para la busqueda:\n"))
         longMax=float(input("Ingrese la longitud maxima para la busqueda:\n"))
         latMin=float(input("Ingrese la latitud minima para la busqueda:\n"))
         latMax=float(input("Ingrese la latitud maxima para la busqueda:\n"))
-        start_time = time.process_time()
+        start_time6 = time.process_time()
         avistamientosZoneGeo=avistamientosZona(expediente,longMin,longMax,latMin,latMax)
-        top_time= time.process_time()
-        timeSort= (stop_time-start_time)*1000
+        stop_time6= time.process_time()
+        timeSort6= (stop_time6-start_time6)*1000
         avis=avistamientosZoneGeo[0]
         numero=avistamientosZoneGeo[1]
         print("\nSe tiene registro de "+str(numero)+" avistamientos entre las latitudes "+str(longMin)+" y "+str(longMax)+" y las latitudes "+str(latMin)+" y "+str(latMax))
@@ -281,7 +281,7 @@ while True:
         else:
             print("_________________________________________________________________________________________________________________________\n")
         printSightings(avis,1,9,10)
-        print(str(timeSort)+'milisegundos')
+        print(str(timeSort6)+'milisegundos')
     elif inputs == "7":
         pass
     elif inputs == "0":
