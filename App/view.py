@@ -146,11 +146,15 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if inputs == "1":
         print("Cargando información de los archivos ....")
+        start_time = time.process_time()
         expediente=createRecord()
         controller.addSightings(expediente)
         sortSightings(expediente)
+        stop_time= time.process_time()
+        timeSort= (stop_time-start_time)*1000
         print ("\nAvistamientos cargados: "+str(lt.size(expediente["avistamientos"]))+"\n")
         print10Sightings(expediente)
+        print(str(timeSort)+'milisegundos')
     elif inputs == "2":
         ciudad=input("Ingrese el nombre de la ciudad a consultar: \n")
         start_time = time.process_time()
