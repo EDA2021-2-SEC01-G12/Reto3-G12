@@ -37,7 +37,7 @@ def createRecord():
 # Funciones para la carga de datos
 
 def addSightings(expediente):
-    UFOSFile = cf.data_dir + "UFOS-utf8-small.csv"
+    UFOSFile = cf.data_dir + "UFOS-utf8-large.csv"
     sightings = csv.DictReader(open(UFOSFile, encoding="utf-8"),delimiter=",")
     for avistamiento in sightings:
         model.addSightings(expediente, avistamiento)
